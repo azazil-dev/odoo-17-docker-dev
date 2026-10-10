@@ -1,0 +1,16 @@
+# 🔒 File rahasia — jangan pernah di-commit
+config/odoo_pg_pass
+
+# Environment & cache Python
+__pycache__/
+*.py[cod]
+.env
+
+# Catatan editor/OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Log
+*.log

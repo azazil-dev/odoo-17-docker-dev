@@ -1,0 +1,36 @@
+version: '2'
+services:
+  web:
+    image: odoo:17.0   # ✅ ganti jadi Odoo 17
+    depends_on:
+      - postgres-15    # ✅ lebih cocok pakai PostgreSQL 15 untuk Odoo 17
+    ports:
+      - "8069:8069"    # ✅ ganti port biar ga bentrok (misalnya 8069 untuk Odoo 17)
+    volumes:
+      - odoo-data-volume:/var/lib/odoo
+      - ./config:/etc/odoo
+      - ./addons:/mnt/extra-addons
+    environment:
+      - PASSWORD_FILE=/run/secrets/postgresql_password
+    secrets:
+      - postgresql_password
+
+  postgres-15:
+    image: postgres:15   # ✅ PostgreSQL 15 lebih stabil untuk Odoo 17
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgresql_password
+      - POSTGRES_USER=odoo
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - db-data-volume:/var/lib/postgresql/data/pgdata
+    secrets:
+      - postgresql_password
+
+volumes:
+  odoo-data-volume:
+  db-data-volume:
+
+secrets:
+  postgresql_password:
+    file: ./config/odoo_pg_pass
